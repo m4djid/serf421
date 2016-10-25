@@ -12,6 +12,7 @@ public class Jeu {
 	static int njetons1;
 	static int njetons2;
 	static int njetons;
+	static int s;
 	static int s1;
 	static int s2;
 	static int Nj1;
@@ -85,7 +86,7 @@ public class Jeu {
 	
 	static boolean tierce(int a, int b, int c) 
 	{
-		if(c + b == a)
+		if(c + 1 == b && b + 1 == a)
 		{
 			return true;
 		}
@@ -145,17 +146,22 @@ public class Jeu {
 		return s;		
 	}
 	
-	static void Tour(int njetons, int s)
+	static void Tour(int njetonsx, int sx)
 	{
 		char reponse;
 		String relance;
 		char garder = 0;
 		int numDes;
 		int nbDes;
+		System.out.println("Début du tour");
+		System.out.println("Appuyez sur une touche pour lancer les dés");
+		String clavier = Clavier.readString();
+		if (clavier !=""){
 		d1 = randomize();
 		d2 = randomize();
 		d3 = randomize();
 		System.out.println("d1 "+d1+" d2 "+d2+" d3 "+d3);
+		}
 		nombreLancer = 1;
 		
 		System.out.println("Voulez-vous garder la combinaison ? o/n");
@@ -237,30 +243,82 @@ public class Jeu {
 		}
 		}
 		classement(d1,d2,d3);
-		int z = calculNbreJetons(a,b,c);
-		System.out.println(z);
-		int h = CalculNbreS(a,b,c);
-		System.out.println(h);
-		
+		njetons = calculNbreJetons(a,b,c);
+		s = CalculNbreS(a,b,c);
+		System.out.println("Fin du tour");
 			
 	}
 	
-	
-	
-	public static void main(String[] args)
+	static void game() 
 	{
 		int x;
 		System.out.println("Jouez au 421");
 		System.out.println("Veuillez entrez un nombre de jeton");
 		x = Clavier.readInt();
 		njetons = x;
-		//while (Nj1 > 0 && Nj2 > 0)
-		//{
-		Tour(njetons,0);
+		Nj1 = x;
+		Nj2 = x;
+		do
+		{
+		System.out.println("Tour joueur 1");
+		Tour(njetons,s);
+		njetons1 = njetons;
+		s1 = s;
+		System.out.println("Tour joueur 2");
+		Tour(njetons,s);
+		njetons2 = njetons;
+		s2 = s;
 		
-		Tour(njetons,0);
-		
-		//}
-
+		if (njetons1 == njetons2)
+		{
+			if(s1 == s2)
+			{
+				System.out.println("Egalité");
+			}
+			else if (s1 > s2)
+			{
+				Nj1 = Nj1 - njetons1;
+				Nj2 = Nj2 + njetons1;
+				System.out.println("Score :");
+				System.out.println("Joueur 1 : "+ Nj1 +" Joueur 2 : "+ Nj2);
+			}
+			else if (s1 < s2)
+			{
+				Nj2 = Nj2 - njetons2;
+				Nj1 = Nj1 + njetons2;
+				System.out.println("Score :");
+				System.out.println("Joueur 1 : "+ Nj1 +" Joueur 2 : "+ Nj2);
+			}
+		}
+		else if (njetons1 > njetons2)
+		{
+			Nj1 = Nj1 - njetons1;
+			Nj2 = Nj2 + njetons1;
+			System.out.println("Score :");
+			System.out.println("Joueur 1 : "+ Nj1 +" Joueur 2 : "+ Nj2);
+		}
+		else if (njetons1 < njetons2)
+		{
+			Nj2 = Nj2 - njetons2;
+			Nj1 = Nj1 + njetons2;
+			System.out.println("Score :");
+			System.out.println("Joueur 1 : "+ Nj1 +" Joueur 2 : "+ Nj2);
+		}
+		if (Nj1 <= 0)
+		{
+			System.out.println("Joueur 1 a gagné");
+		}
+		if (Nj2 <= 0)
+		{
+			System.out.println("Joueur 2 a gagné");
+		}
+		}
+		while (Nj1 > 0 && Nj2 > 0);
+	}
+	
+	
+	public static void main(String[] args)
+	{
+	game();
 	}
 }
